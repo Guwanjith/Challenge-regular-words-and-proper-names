@@ -12,10 +12,31 @@ int main(int argc, const char * argv[])
 {
 
     @autoreleasepool {
+        //Read in a file as a huge string
+        NSString *properNames = [NSString stringWithContentsOfFile:@"/usr/share/dict/propernames" encoding:NSUTF8StringEncoding error:NULL];
         
-        // insert code here...
-        NSLog(@"Hello, World!");
+        NSString *wordString = [NSString stringWithContentsOfFile:@"/usr/share/dict/words/" encoding:NSUTF8StringEncoding error:NULL];
         
+        //Break into an array of strings
+        NSArray *names = [properNames componentsSeparatedByString:@"\n"];
+        NSArray *words = [wordString componentsSeparatedByString:@"\n"];
+                //Go through the names one by one
+        BOOL isUppercase;
+        for(NSString *name in names)
+        {
+            for(NSString *word in words)
+            {
+                //Do the comparison (uppercase comes before lowercase)
+                if ([name caseInsensitiveCompare: word] == NSOrderedSame && [name compare: word] == NSOrderedAscending)
+                {
+                    //numberOfInnerIterations++;
+                    NSLog(@"The proper name %@ is also the regular word %@", name, word);
+                    
+                    //Found a match, no need to do any further comparisons
+                    break;
+                }
+            }
+        }
     }
     return 0;
 }
